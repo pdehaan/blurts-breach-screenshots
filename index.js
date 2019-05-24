@@ -10,7 +10,7 @@ const argv = process.argv.slice(2);
 
 main(...argv);
 
-async function main(limit = 0, screenshotType = "png") {
+async function main(limit = 0, screenshotType = "png", shotDir = "shots") {
   const breaches = await getBreaches(limit);
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -21,7 +21,7 @@ async function main(limit = 0, screenshotType = "png") {
   });
 
   try {
-    fs.mkdirSync("shots");
+    fs.mkdirSync(shotDir);
   } catch (err) {
     switch (err.code) {
       case "EEXIST":
@@ -36,7 +36,7 @@ async function main(limit = 0, screenshotType = "png") {
 
   for (const { Name } of breaches) {
     const breachUrl = `https://fx-breach-alerts.herokuapp.com/breach-details/${Name}`;
-    const breachPath = path.join("shots", `${Name}.${screenshotType}`);
+    const breachPath = path.join(shotDir, `${Name}.${screenshotType}`);
     console.log(`Fetching ${breachUrl} (${breachPath})`);
     await page.goto(breachUrl, { waitUntil: "networkidle0" });
     await page.screenshot({

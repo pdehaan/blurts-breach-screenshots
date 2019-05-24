@@ -5,7 +5,7 @@ Scrape the Firefox Monitor /breach-details/${Name} endpoints and save screenshot
 ## USAGE
 
 ```js
-npx pdehaan/blurts-breach-screenshots [limit] [type="png"|"jpeg"]
+npx pdehaan/blurts-breach-screenshots [limit] [type="png"|"jpeg"] [shotDir="shots"]
 ```
 
 ## NOTES
