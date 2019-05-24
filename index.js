@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+const fs = require("fs");
+const path = require("path");
+
 const axios = require("axios");
 const puppeteer = require("puppeteer");
 
@@ -8,7 +11,6 @@ const argv = process.argv.slice(2);
 main(...argv);
 
 async function main(limit = 0, screenshotType = "png") {
-  console.log(limit, screenshotType);
   const breaches = await getBreaches(limit);
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -18,9 +20,23 @@ async function main(limit = 0, screenshotType = "png") {
     deviceScaleFactor: 1
   });
 
+  try {
+    fs.mkdirSync("shots");
+  } catch (err) {
+    switch (err.code) {
+      case "EEXIST":
+        // Directory already exists. Nothing to see here.
+        break;
+      default:
+        console.error(err.message);
+        process.exitCode = 1;
+        return;
+    }
+  }
+
   for (const { Name } of breaches) {
     const breachUrl = `https://fx-breach-alerts.herokuapp.com/breach-details/${Name}`;
-    const breachPath = `./shots/${Name}.${screenshotType}`;
+    const breachPath = path.join("shots", `${Name}.${screenshotType}`);
     console.log(`Fetching ${breachUrl} (${breachPath})`);
     await page.goto(breachUrl, { waitUntil: "networkidle0" });
     await page.screenshot({
