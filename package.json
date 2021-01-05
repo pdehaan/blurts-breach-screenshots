@@ -4,7 +4,7 @@
   "author": "Peter deHaan <peter@deseloper.com> (https://about.me/peterdehaan)",
   "bin": "index.js",
   "dependencies": {
-    "axios": "0.18.1",
+    "axios": "0.21.1",
     "imagemin-cli": "4.0.1",
     "puppeteer": "1.17.0"
   },
